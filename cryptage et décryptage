@@ -1,0 +1,74 @@
+#cryptage
+def rotation(liste):
+    liste2=liste[1:]+liste[:1]
+    return liste2
+alphabets=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+liste2=rotation(alphabets)
+print(liste2)
+
+def calque(texte,cle):
+    R=""
+    j=0
+    for i in range(len(texte)):
+        carac=texte[i]
+        if carac==" ":
+            R+=" "
+        else:
+            R+=cle[j%len(cle)]
+            j+=1
+    return R
+
+
+def matrice():
+    alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    matrice = []
+    for i in range(26):
+        matrice.append(alphabets)  
+        alphabets = rotation(alphabets)  
+    return matrice
+
+
+
+def crypter(texte, cle):
+    matrice_sub = matrice()
+    calque_cle = calque(texte, cle)
+    texte_crypte = ""
+    
+    for i in range(len(texte)):
+        if texte[i] == " ":
+            texte_crypte += " "
+        else:
+            ligne = ord(texte[i]) - ord('a')
+            colonne = ord(calque_cle[i]) - ord('a')
+            texte_crypte += matrice_sub[ligne][colonne]
+    
+    return texte_crypte
+
+def decrypter(texte_crypte, cle):
+    matrice_sub = matrice()
+    calque_cle = calque(texte_crypte, cle)
+    texte_decrypte = ""
+    
+    for i in range(len(texte_crypte)):
+        if texte_crypte[i] == " ":
+            texte_decrypte += " "
+        else:
+            colonne = ord(calque_cle[i]) - ord('a')
+            ligne = matrice_sub[colonne].index(texte_crypte[i])
+            texte_decrypte += chr(ligne + ord('a'))
+    
+    return texte_decrypte
+
+choix = input("Voulez-vous crypter ou décrypter ? entrez 'crypter' ou 'decrypter'  ").lower()
+texte = input("Entrez le texte : ").lower()
+cle = input("Entrez la clé : ").lower()
+
+
+if choix == "crypter":
+    texte_crypte = crypter(texte, cle)
+    print("Texte crypté :", texte_crypte)
+elif choix == "decrypter":
+    texte_decrypte = decrypter(texte, cle)
+    print("Texte décrypté :", texte_decrypte)
+else:
+    print("Choix invalide. Veuillez entrer 'crypter' ou 'decrypter'.")
